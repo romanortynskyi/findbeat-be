@@ -4,7 +4,7 @@ import {
   Length,
 } from 'class-validator'
 
-class SignUpRequestDto {
+class JoinRequestDto {
   @IsEmail()
   email: string
 
@@ -21,4 +21,4 @@ class SignUpRequestDto {
   lastName: string
 }
 
-export default SignUpRequestDto
+export default JoinRequestDto

@@ -1,6 +1,6 @@
 import { MigrationInterface, QueryRunner } from 'typeorm'
 
-export class AddUserEntity1719743389184 implements MigrationInterface {
+class AddUserEntity1719743389184 implements MigrationInterface {
   name = 'AddUserEntity1719743389184'
 
   public async up(queryRunner: QueryRunner): Promise<void> {
@@ -27,5 +27,6 @@ export class AddUserEntity1719743389184 implements MigrationInterface {
     await queryRunner.query(`DROP TABLE "user"`)
     await queryRunner.query(`DROP TYPE "public"."user_role_enum"`)
 	}
-
 }
+
+export default AddUserEntity1719743389184

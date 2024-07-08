@@ -3,6 +3,9 @@ import { config } from 'dotenv'
 import { DataSource } from 'typeorm'
 
 import UserEntity from './src/entities/user.entity'
+
+import AddUserEntity1719743389184 from './src/migrations/1719743389184-add-user-entity'
+
 config({
   path: '.env.local',
 })
@@ -20,6 +23,6 @@ export default new DataSource({
     UserEntity,
   ],
   migrations: [
-  
+    AddUserEntity1719743389184,
   ],
 })

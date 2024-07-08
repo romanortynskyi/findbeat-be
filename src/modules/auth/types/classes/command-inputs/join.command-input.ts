@@ -1,8 +1,8 @@
-class SignUpCommandInput {
+class JoinCommandInput {
   firstName: string
   lastName: string
   email: string
   password: string
 }
 
-export default SignUpCommandInput
+export default JoinCommandInput

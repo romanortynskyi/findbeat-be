@@ -1,18 +1,18 @@
 import { Body, Controller, Post } from '@nestjs/common'
 
 import Route from 'src/types/enums/route.enum'
-import SignUpCommand from './commands/sign-up.command'
-import SignUpRequestDto from './types/classes/dto/request/sign-up-request.dto'
-import SignUpCommandInput from './types/classes/command-inputs/sign-up.command-input'
+import JoinCommand from './commands/join.command'
+import JoinCommandInput from './types/classes/command-inputs/join.command-input'
+import JoinRequestDto from './types/classes/dto/request/join-request.dto'
 
 @Controller(Route.Auth)
 class AuthController {
   constructor(
-    private readonly signUpCommand: SignUpCommand,
+    private readonly joinCommand: JoinCommand,
   ) {}
 
-  @Post('/sign-up')
-  async signUp(@Body() dto: SignUpRequestDto) {
+  @Post('/join')
+  async join(@Body() dto: JoinRequestDto) {
     const {
       email,
       password,
@@ -20,16 +20,16 @@ class AuthController {
       lastName,
     } = dto
 
-    const input: SignUpCommandInput = {
+    const input: JoinCommandInput = {
       email,
       password,
       firstName,
       lastName
     }
 
-    await this.signUpCommand.execute(input)
+    await this.joinCommand.execute(input)
 
-    return this.signUpCommand.result
+    return this.joinCommand.result
   }
 }
 
