@@ -4,8 +4,9 @@ import { TypeOrmModule } from '@nestjs/typeorm'
 
 import AuthController from './auth.controller'
 import AuthService from './services/auth.service'
-import SignUpCommand from './commands/join.command'
 import UserEntity from 'src/entities/user.entity'
+import JoinCommand from './commands/join.command'
+import SignInCommand from './commands/sign-in.command'
 
 @Module({
   imports: [
@@ -17,7 +18,8 @@ import UserEntity from 'src/entities/user.entity'
   controllers: [AuthController],
   providers: [
     AuthService,
-    SignUpCommand,
+    JoinCommand,
+    SignInCommand,
   ],
 })
 class AuthModule {

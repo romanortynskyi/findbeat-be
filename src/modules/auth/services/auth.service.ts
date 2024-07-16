@@ -1,7 +1,8 @@
 import { Injectable } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
 import { ConfigService } from '@nestjs/config'
-import { DataSource } from 'typeorm'
+import { InjectRepository } from '@nestjs/typeorm'
+import { DataSource, Repository } from 'typeorm'
 import { instanceToPlain } from 'class-transformer'
 import * as argon2 from 'argon2'
 
@@ -12,6 +13,9 @@ import { getObjectWithoutKeys } from 'src/utils/get-object-without-keys'
 import JoinRequestDto from '../types/classes/dto/request/join-request.dto'
 import { EmailAlreadyExistsException } from 'src/exceptions/email-already-exists.exception'
 import { InternalServerErrorException } from 'src/exceptions/internal-server-error.exception'
+import SignInRequestDto from '../types/classes/dto/request/sign-in-request.dto'
+import SignInResponseDto from '../types/classes/dto/response/sign-in-response.dto'
+import { WrongEmailOrPasswordException } from 'src/exceptions/wrong-email-or-password.exception'
 
 @Injectable()
 class AuthService {
@@ -19,6 +23,8 @@ class AuthService {
     private readonly dataSource: DataSource,
     private readonly configService: ConfigService,
     private readonly jwtService: JwtService,
+    @InjectRepository(UserEntity)
+    private readonly userRepository: Repository<UserEntity>,
   ) {}
 
   signToken(user: UserEntity): Promise<string> {
@@ -94,6 +100,45 @@ class AuthService {
 
       throw error
     }
+  }
+
+  async signIn(dto: SignInRequestDto): Promise<SignInResponseDto> {
+    const { email, password } = dto
+
+    const user = await this.userRepository.findOne({
+      where: {
+        email,
+      },
+      select: [
+        'id',
+        'firstName',
+        'lastName',
+        'email',
+        'role',
+        'password',
+        'createdAt',
+        'updatedAt',
+      ],
+    })
+
+    if (!user || !user.password) {
+      throw new WrongEmailOrPasswordException()
+    }
+
+    const passwordIsCorrect = await argon2.verify(user.password, password)
+
+    if (!passwordIsCorrect) {
+      throw new WrongEmailOrPasswordException()
+    }
+
+    const userWithoutPassword = getObjectWithoutKeys(user, ['password'])
+    const token = await this.signToken(userWithoutPassword)
+    const userToSend = {
+      ...userWithoutPassword,
+      token,
+    }
+
+    return userToSend
   }
 }
 

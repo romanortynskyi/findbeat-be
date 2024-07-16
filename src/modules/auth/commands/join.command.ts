@@ -9,8 +9,8 @@ import AuthService from '../services/auth.service'
 class JoinCommand implements Command<JoinCommandInput, JoinResponseDto> {
   constructor(private readonly authService: AuthService) {}
 
-  async execute(dto: JoinCommandInput): Promise<void> {
-    const result = await this.authService.join(dto)
+  async execute(input: JoinCommandInput): Promise<void> {
+    const result = await this.authService.join(input)
 
     this.result = result
   }
