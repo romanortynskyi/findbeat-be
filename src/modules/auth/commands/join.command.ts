@@ -3,7 +3,7 @@ import { Injectable } from '@nestjs/common'
 import Command from 'src/types/abstract-classes/command'
 import JoinResponseDto from '../types/classes/dto/response/join-response.dto'
 import JoinCommandInput from '../types/classes/command-inputs/join.command-input'
-import AuthService from '../services/auth.service'
+import AuthService from '../services/implementations/auth.service'
 
 @Injectable()
 class JoinCommand implements Command<JoinCommandInput, JoinResponseDto> {
