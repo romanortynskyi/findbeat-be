@@ -4,11 +4,17 @@ import { ApiResponse, Client } from '@opensearch-project/opensearch'
 import { BulkStats } from '@opensearch-project/opensearch/lib/Helpers'
 
 import OpenSearchIndex from 'src/types/enums/open-search-index.enum'
-import AbstractOpenSearchService from '../abstract/abstract-open-search.service'
+import AbstractSearchService from '../abstract/abstract-search.service'
 import envKeys from 'src/consts/env-keys'
 
 @Injectable()
-class OpenSearchService implements AbstractOpenSearchService {
+class OpenSearchService
+  implements
+    AbstractSearchService<
+      OpenSearchIndex,
+      ApiResponse<Record<string, any>, unknown>,
+      BulkStats
+    > {
   client: Client
 
   constructor(private configService: ConfigService) {

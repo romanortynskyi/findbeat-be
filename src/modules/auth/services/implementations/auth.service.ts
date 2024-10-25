@@ -3,11 +3,11 @@ import { InjectRepository } from '@nestjs/typeorm'
 import { DataSource, Repository } from 'typeorm'
 import * as argon2 from 'argon2'
 
-import JoinResponseDto from '../../types/classes/dto/response/join-response.dto'
+import SignUpResponseDto from '../../types/classes/dto/response/sign-up-response.dto'
 import UserEntity from 'src/entities/user.entity'
 import AuthProvider from 'src/types/enums/auth-provider.enum'
 import { getObjectWithoutKeys } from 'src/utils/get-object-without-keys'
-import JoinRequestDto from '../../types/classes/dto/request/join-request.dto'
+import SignUpRequestDto from '../../types/classes/dto/request/sign-up-request.dto'
 import { EmailAlreadyExistsException } from 'src/exceptions/email-already-exists.exception'
 import { InternalServerErrorException } from 'src/exceptions/internal-server-error.exception'
 import SignInRequestDto from '../../types/classes/dto/request/sign-in-request.dto'
@@ -15,7 +15,7 @@ import SignInResponseDto from '../../types/classes/dto/response/sign-in-response
 import { WrongEmailOrPasswordException } from 'src/exceptions/wrong-email-or-password.exception'
 import AbstractAuthService from '../abstract/abstract-auth.service'
 import JsonWebTokenService from 'src/modules/json-web-token/services/implementations/json-web-token.service'
-import OpenSearchService from 'src/modules/open-search/services/implementations/open-search.service'
+import OpenSearchService from 'src/modules/search/services/implementations/open-search.service'
 import OpenSearchIndex from 'src/types/enums/open-search-index.enum'
 
 @Injectable()
@@ -28,7 +28,7 @@ class AuthService implements AbstractAuthService {
     private readonly userRepository: Repository<UserEntity>,
   ) {}
 
-  async join(dto: JoinRequestDto): Promise<JoinResponseDto> {
+  async signUp(dto: SignUpRequestDto): Promise<SignUpResponseDto> {
     const { email, password, firstName, lastName } = dto
 
     const queryRunner = this.dataSource.createQueryRunner()

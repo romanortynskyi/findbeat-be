@@ -2,26 +2,29 @@ import {
   Body,
   Controller,
   HttpCode,
+  HttpStatus,
   Post,
 } from '@nestjs/common'
 
-import Route from 'src/types/enums/route.enum'
-import JoinCommand from './commands/join.command'
-import JoinCommandInput from './types/classes/command-inputs/join.command-input'
-import JoinRequestDto from './types/classes/dto/request/join-request.dto'
+import Route from 'src/types/enums/routes/route.enum'
+import SignUpCommand from './commands/sign-up.command'
+import SignUpCommandInput from './types/classes/command-inputs/sign-up.command-input'
+import SignUpRequestDto from './types/classes/dto/request/sign-up-request.dto'
 import SignInRequestDto from './types/classes/dto/request/sign-in-request.dto'
 import SignInCommandInput from './types/classes/command-inputs/sign-in.command-input'
 import SignInCommand from './commands/sign-in.command'
+import AuthRoute from 'src/types/enums/routes/auth-route.enum'
 
 @Controller(Route.Auth)
 class AuthController {
   constructor(
-    private readonly joinCommand: JoinCommand,
+    private readonly signUpCommand: SignUpCommand,
     private readonly signInCommand: SignInCommand,
   ) {}
 
-  @Post('/join')
-  async join(@Body() dto: JoinRequestDto) {
+  @HttpCode(HttpStatus.CREATED)
+  @Post(AuthRoute.SignUp)
+  async signUp(@Body() dto: SignUpRequestDto) {
     const {
       email,
       password,
@@ -29,20 +32,20 @@ class AuthController {
       lastName,
     } = dto
 
-    const input: JoinCommandInput = {
+    const input: SignUpCommandInput = {
       email,
       password,
       firstName,
       lastName
     }
 
-    await this.joinCommand.execute(input)
+    await this.signUpCommand.execute(input)
 
-    return this.joinCommand.result
+    return this.signUpCommand.result
   }
 
-  @HttpCode(200)
-  @Post('/sign-in')
+  @HttpCode(HttpStatus.OK)
+  @Post(AuthRoute.SignIn)
   async signIn(@Body() dto: SignInRequestDto) {
     const { email, password } = dto
 
